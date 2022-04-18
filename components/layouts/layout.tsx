@@ -17,7 +17,9 @@ export default function Layout({ children }: Props) {
       <Menu></Menu>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        <Container style={{ display: "flex" }}>{children}</Container>
+        <Container style={{ display: "flex", paddingLeft: 240 }}>
+          {children}
+        </Container>
       </Box>
       <Footer
         style={{
