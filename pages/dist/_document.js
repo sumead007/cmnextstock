@@ -8,7 +8,7 @@ function CMDoc() {
             react_1["default"].createElement("link", { rel: "icon", type: "image/x-icon", href: "/favicon.ico" }),
             react_1["default"].createElement("link", { rel: "stylesheet", href: "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" }),
             react_1["default"].createElement("link", { rel: "stylesheet", href: "https://fonts.googleapis.com/icon?family=Material+Icons" })),
-        react_1["default"].createElement("body", null,
+        react_1["default"].createElement("body", { style: { backgroundColor: "#f1f1f1" } },
             react_1["default"].createElement(document_1.Main, null),
             react_1["default"].createElement(document_1.NextScript, null))));
 }

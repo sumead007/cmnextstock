@@ -19,6 +19,7 @@
     "next": "12.1.5",
     "react": "18.0.0",
     "react-dom": "18.0.0",
+    "react-moment": "^1.1.2",
     "react-number-format": "^4.9.1"
   },
   "devDependencies": {

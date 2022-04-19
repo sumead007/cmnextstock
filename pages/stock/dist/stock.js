@@ -1,9 +1,9 @@
 "use strict";
 exports.__esModule = true;
 var react_1 = require("react");
-var layout_1 = require("../components/layouts/layout");
+var layout_1 = require("../../components/layouts/layout");
 var x_data_grid_1 = require("@mui/x-data-grid");
-var dummy_1 = require("./api/dummy");
+var dummy_1 = require("../api/dummy");
 var material_1 = require("@mui/material");
 var react_number_format_1 = require("react-number-format");
 var Edit_1 = require("@mui/icons-material/Edit");

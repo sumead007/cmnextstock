@@ -16,7 +16,7 @@ export default function CMDoc() {
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
       </Head>
-      <body>
+      <body style={{ backgroundColor: "#f1f1f1" }}>
         <Main />
         <NextScript />
       </body>
