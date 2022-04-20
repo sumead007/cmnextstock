@@ -9,10 +9,32 @@ var CardMedia_1 = require("@mui/material/CardMedia");
 var Button_1 = require("@mui/material/Button");
 var TextField_1 = require("@mui/material/TextField");
 var router_1 = require("next/router");
+var formik_1 = require("formik");
+var yup = require("yup");
 var onClickLogin = function () {
     router_1["default"].push("/stock");
 };
+var validationSchema = yup.object({
+    username: yup
+        .string("Enter your username")
+        .min(2, "username should be of minimum 2 characters length")
+        .required("username is required"),
+    password: yup
+        .string("Enter your password")
+        .min(2, "กรุณากรอก1ตัวขึ้น")
+        .required("password is required")
+});
 function Login(_a) {
+    var formik = formik_1.useFormik({
+        initialValues: {
+            username: "",
+            password: ""
+        },
+        validationSchema: validationSchema,
+        onSubmit: function (values) {
+            alert(JSON.stringify(values, null, 2));
+        }
+    });
     return (react_1["default"].createElement(react_1["default"].Fragment, null,
         react_1["default"].createElement(material_1.Box, { sx: {
                 display: "flex",
@@ -27,10 +49,10 @@ function Login(_a) {
                 react_1["default"].createElement(CardMedia_1["default"], { component: "img", height: "200", image: "https://static.thairath.co.th/media/dFQROr7oWzulq5Fa4MDgvq5XaLTlI18RVr0bv8sSRPmSp7DkZCXMWirpW7Dcb3Sjkwj.jpg", alt: "green iguana" }),
                 react_1["default"].createElement(CardContent_1["default"], null,
                     react_1["default"].createElement(material_1.Box, { component: "h1" }, "Login"),
-                    react_1["default"].createElement("form", { noValidate: true },
-                        react_1["default"].createElement(TextField_1["default"], { id: "username", label: "username", type: "text", autoComplete: "username", margin: "normal", fullWidth: true }),
-                        react_1["default"].createElement(TextField_1["default"], { id: "password", label: "Password", type: "password", autoComplete: "password", margin: "normal", fullWidth: true }),
-                        react_1["default"].createElement(Button_1["default"], { fullWidth: true, variant: "contained", onClick: onClickLogin }, "Login"),
+                    react_1["default"].createElement("form", { onSubmit: formik.handleSubmit },
+                        react_1["default"].createElement(TextField_1["default"], { id: "username", label: "username", type: "text", autoComplete: "username", margin: "normal", fullWidth: true, value: formik.values.username, onChange: formik.handleChange, error: formik.touched.username && Boolean(formik.errors.username), helperText: formik.touched.username && formik.errors.username }),
+                        react_1["default"].createElement(TextField_1["default"], { id: "password", label: "Password", type: "password", autoComplete: "password", margin: "normal", fullWidth: true, value: formik.values.password, onChange: formik.handleChange, error: formik.touched.password && Boolean(formik.errors.password), helperText: formik.touched.password && formik.errors.password }),
+                        react_1["default"].createElement(Button_1["default"], { fullWidth: true, variant: "contained", type: "submit" }, "Login"),
                         react_1["default"].createElement(Button_1["default"], { fullWidth: true, onClick: function () {
                                 router_1["default"].push("/register");
                             } }, "register"))),

@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { createStyles, makeStyles } from "@mui/material/styles";
-import React from "react";
+import React, { useState } from "react";
 
 import styles from "../styles/login.module.css";
 import Card from "@mui/material/Card";
@@ -14,7 +14,15 @@ import Router from "next/router";
 
 type Props = {};
 
+type TAccount = {
+  username: string;
+  password: string;
+};
 export default function Register({}: Props) {
+  const [account, setaccount] = useState<TAccount>({
+    username: "",
+    password: "",
+  });
   return (
     <React.Fragment>
       <Box
@@ -48,6 +56,10 @@ export default function Register({}: Props) {
                 autoComplete="username"
                 margin="normal"
                 fullWidth
+                value={account.username}
+                onChange={(e) =>
+                  setaccount({ ...account, username: e.target.value })
+                }
               />
 
               <TextField
@@ -57,12 +69,17 @@ export default function Register({}: Props) {
                 autoComplete="password"
                 margin="normal"
                 fullWidth
+                value={account.password}
+                onChange={(e) =>
+                  setaccount({ ...account, password: e.target.value })
+                }
               />
               <Button
                 fullWidth
                 variant="contained"
                 onClick={() => {
-                  alert("register");
+                  alert(JSON.stringify(account));
+
                 }}
               >
                 register

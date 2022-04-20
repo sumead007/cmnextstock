@@ -11,13 +11,37 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Router from "next/router";
+import { useFormik } from "formik";
+import * as yup from "yup";
 type Props = {};
 
 const onClickLogin = () => {
   Router.push("/stock");
 };
 
+const validationSchema = yup.object({
+  username: yup
+    .string("Enter your username")
+    .min(2, "username should be of minimum 2 characters length")
+    .required("username is required"),
+  password: yup
+    .string("Enter your password")
+    .min(2, "กรุณากรอก1ตัวขึ้น")
+    .required("password is required"),
+});
+
 export default function Login({}: Props) {
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
+
   return (
     <React.Fragment>
       <Box
@@ -43,7 +67,7 @@ export default function Login({}: Props) {
           <CardContent>
             <Box component="h1">Login</Box>
 
-            <form noValidate>
+            <form onSubmit={formik.handleSubmit}>
               <TextField
                 id="username"
                 label="username"
@@ -51,6 +75,12 @@ export default function Login({}: Props) {
                 autoComplete="username"
                 margin="normal"
                 fullWidth
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.username && Boolean(formik.errors.username)
+                }
+                helperText={formik.touched.username && formik.errors.username}
               />
 
               <TextField
@@ -60,8 +90,14 @@ export default function Login({}: Props) {
                 autoComplete="password"
                 margin="normal"
                 fullWidth
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
               />
-              <Button fullWidth variant="contained" onClick={onClickLogin}>
+              <Button fullWidth variant="contained" type="submit">
                 Login
               </Button>
               <Button
