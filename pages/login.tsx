@@ -13,6 +13,7 @@ import TextField from "@mui/material/TextField";
 import Router from "next/router";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useSelector } from "react-redux";
 type Props = {};
 
 const onClickLogin = () => {
@@ -30,7 +31,8 @@ const validationSchema = yup.object({
     .required("password is required"),
 });
 
-export default function Login({}: Props) {
+export default function Login({ }: Props) {
+ const authReducer =  useSelector(({authReducer})=>authReducer)
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -109,6 +111,7 @@ export default function Login({}: Props) {
                 register
               </Button>
             </form>
+            { authReducer.token && <span>{authReducer.token}</span>}
           </CardContent>
           <CardActions>
             <Button size="small">Share</Button>

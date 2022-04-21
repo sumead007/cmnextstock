@@ -11,6 +11,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Router from "next/router";
+import actions from "../redux/actions";
+import { useDispatch } from "react-redux";
 
 type Props = {};
 
@@ -19,6 +21,7 @@ type TAccount = {
   password: string;
 };
 export default function Register({}: Props) {
+  const dispatch = useDispatch();
   const [account, setaccount] = useState<TAccount>({
     username: "",
     password: "",
@@ -79,7 +82,7 @@ export default function Register({}: Props) {
                 variant="contained"
                 onClick={() => {
                   alert(JSON.stringify(account));
-
+                  dispatch(actions.register({...account}),"authen/register")
                 }}
               >
                 register
