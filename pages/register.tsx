@@ -13,7 +13,8 @@ import TextField from "@mui/material/TextField";
 import Router from "next/router";
 import actions from "../redux/actions";
 import { useDispatch } from "react-redux";
-
+import { useSelector } from "react-redux";
+import Alert from '@mui/material/Alert';
 type Props = {};
 
 type TAccount = {
@@ -21,6 +22,8 @@ type TAccount = {
   password: string;
 };
 export default function Register({}: Props) {
+  const registerReducer = useSelector((state) => state.registerReducer);
+
   const dispatch = useDispatch();
   const [account, setaccount] = useState<TAccount>({
     username: "",
@@ -81,8 +84,8 @@ export default function Register({}: Props) {
                 fullWidth
                 variant="contained"
                 onClick={() => {
-                  alert(JSON.stringify(account));
-                  dispatch(actions.register({...account}),"authen/register")
+                  // alert(JSON.stringify(account));
+                  dispatch(actions.register(account));
                 }}
               >
                 register
@@ -96,6 +99,9 @@ export default function Register({}: Props) {
               >
                 cencel
               </Button>
+              {registerReducer.isFailed && (
+                <Alert severity="error">Register failed!</Alert>
+              )}
             </form>
           </CardContent>
           <CardActions>

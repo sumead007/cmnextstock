@@ -35,12 +35,13 @@ router.post("/login", function _callee(req, res) {
               payload = {
                 username: username,
                 level: "normal"
-              };
-              token = jwt.sign(payload);
+              }; // const token = jwt.sign(payload);
+
+              token = payload;
               res.json({
                 result: constants.kResultOk,
-                token: token,
-                username: username,
+                token: "1234",
+                // username,
                 message: JSON.stringify(result)
               });
             } else {

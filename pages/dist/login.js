@@ -11,6 +11,8 @@ var TextField_1 = require("@mui/material/TextField");
 var router_1 = require("next/router");
 var formik_1 = require("formik");
 var yup = require("yup");
+var react_redux_1 = require("react-redux");
+var actions_1 = require("../redux/actions");
 var onClickLogin = function () {
     router_1["default"].push("/stock");
 };
@@ -25,6 +27,12 @@ var validationSchema = yup.object({
         .required("password is required")
 });
 function Login(_a) {
+    //  const authReducer =  useSelector(({authReducer})=>authReducer)
+    var dispatch = react_redux_1.useDispatch();
+    var loginReducer = react_redux_1.useSelector(function (_a) {
+        var loginReducer = _a.loginReducer;
+        return loginReducer;
+    });
     var formik = formik_1.useFormik({
         initialValues: {
             username: "",
@@ -52,7 +60,9 @@ function Login(_a) {
                     react_1["default"].createElement("form", { onSubmit: formik.handleSubmit },
                         react_1["default"].createElement(TextField_1["default"], { id: "username", label: "username", type: "text", autoComplete: "username", margin: "normal", fullWidth: true, value: formik.values.username, onChange: formik.handleChange, error: formik.touched.username && Boolean(formik.errors.username), helperText: formik.touched.username && formik.errors.username }),
                         react_1["default"].createElement(TextField_1["default"], { id: "password", label: "Password", type: "password", autoComplete: "password", margin: "normal", fullWidth: true, value: formik.values.password, onChange: formik.handleChange, error: formik.touched.password && Boolean(formik.errors.password), helperText: formik.touched.password && formik.errors.password }),
-                        react_1["default"].createElement(Button_1["default"], { fullWidth: true, variant: "contained", type: "submit" }, "Login"),
+                        react_1["default"].createElement(Button_1["default"], { fullWidth: true, variant: "contained", type: "button", onClick: function () {
+                                dispatch(actions_1["default"].login(formik.values));
+                            } }, "Login"),
                         react_1["default"].createElement(Button_1["default"], { fullWidth: true, onClick: function () {
                                 router_1["default"].push("/register");
                             } }, "register"))),

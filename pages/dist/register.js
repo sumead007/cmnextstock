@@ -20,7 +20,13 @@ var CardMedia_1 = require("@mui/material/CardMedia");
 var Button_1 = require("@mui/material/Button");
 var TextField_1 = require("@mui/material/TextField");
 var router_1 = require("next/router");
+var actions_1 = require("../redux/actions");
+var react_redux_1 = require("react-redux");
+var react_redux_2 = require("react-redux");
+var Alert_1 = require("@mui/material/Alert");
 function Register(_a) {
+    var registerReducer = react_redux_2.useSelector(function (state) { return state.registerReducer; });
+    var dispatch = react_redux_1.useDispatch();
     var _b = react_1.useState({
         username: "",
         password: ""
@@ -47,12 +53,14 @@ function Register(_a) {
                                 return setaccount(__assign(__assign({}, account), { password: e.target.value }));
                             } }),
                         react_1["default"].createElement(Button_1["default"], { fullWidth: true, variant: "contained", onClick: function () {
-                                alert(JSON.stringify(account));
+                                // alert(JSON.stringify(account));
+                                dispatch(actions_1["default"].register(account));
                             } }, "register"),
                         react_1["default"].createElement(Button_1["default"], { fullWidth: true, onClick: function () {
                                 // Router.back();
                                 router_1["default"].push("/login");
-                            } }, "cencel"))),
+                            } }, "cencel"),
+                        registerReducer.isFailed && (react_1["default"].createElement(Alert_1["default"], { severity: "error" }, "Register failed!")))),
                 react_1["default"].createElement(CardActions_1["default"], null,
                     react_1["default"].createElement(Button_1["default"], { size: "small" }, "Share"),
                     react_1["default"].createElement(Button_1["default"], { size: "small" }, "Learn More"))),

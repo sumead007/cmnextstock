@@ -13,7 +13,9 @@ import TextField from "@mui/material/TextField";
 import Router from "next/router";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import actions from "../redux/actions";
+
 type Props = {};
 
 const onClickLogin = () => {
@@ -31,8 +33,11 @@ const validationSchema = yup.object({
     .required("password is required"),
 });
 
-export default function Login({ }: Props) {
- const authReducer =  useSelector(({authReducer})=>authReducer)
+export default function Login({}: Props) {
+  //  const authReducer =  useSelector(({authReducer})=>authReducer)
+  const dispatch = useDispatch();
+  const loginReducer = useSelector(({ loginReducer }) => loginReducer);
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -99,7 +104,14 @@ export default function Login({ }: Props) {
                 }
                 helperText={formik.touched.password && formik.errors.password}
               />
-              <Button fullWidth variant="contained" type="submit">
+              <Button
+                fullWidth
+                variant="contained"
+                type="button"
+                onClick={() => {
+                  dispatch(actions.login(formik.values))
+                }}
+              >
                 Login
               </Button>
               <Button
@@ -111,7 +123,7 @@ export default function Login({ }: Props) {
                 register
               </Button>
             </form>
-            { authReducer.token && <span>{authReducer.token}</span>}
+            {/* { authReducer.token && <span>{authReducer.token}</span>} */}
           </CardContent>
           <CardActions>
             <Button size="small">Share</Button>

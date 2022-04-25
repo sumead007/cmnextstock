@@ -14,7 +14,7 @@ function Layout(_a) {
         react_1["default"].createElement(menu_1["default"], null),
         react_1["default"].createElement(Box_1["default"], { component: "main", sx: { flexGrow: 1, p: 3 } },
             react_1["default"].createElement(Toolbar_1["default"], null),
-            react_1["default"].createElement(Container_1["default"], { style: { display: "flex" } }, children)),
+            react_1["default"].createElement(Container_1["default"], { style: { display: "flex", paddingLeft: 240 } }, children)),
         react_1["default"].createElement(footer_1["default"], { style: {
                 position: "absolute",
                 bottom: 0,
