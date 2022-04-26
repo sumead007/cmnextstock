@@ -8,6 +8,10 @@ import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import CardContent from "@mui/material/CardContent";
 import Router from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import actions from "../../redux/actions";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { StockCreateReducer } from "../../types/stockCreate.reducer.types";
 
 type Props = {};
 
@@ -33,6 +37,9 @@ const showPreviewImage = (values) => {
 };
 
 export default function StockCreate({}: Props) {
+  const stockCreateReducer = useSelector((state) => state.stockCreateReducer);
+  const dispatch = useDispatch();
+
   const formik = useFormik({
     initialValues: {
       name: "foobar",
@@ -41,7 +48,14 @@ export default function StockCreate({}: Props) {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      // alert(JSON.stringify(values, null, 2));
+
+      let formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("price", values.price);
+      formData.append("stock", values.stock);
+      formData.append("image", values.file);
+      dispatch(actions.createStock(formData));
     },
   });
 
@@ -100,8 +114,21 @@ export default function StockCreate({}: Props) {
               }}
             />
             <br />
-            <Button color="primary" variant="contained" type="submit">
+            <Button
+              color="primary"
+              variant="contained"
+              type="submit"
+              onSubmit={() => {}}
+              disabled={stockCreateReducer.isFetching}
+            >
               Submit
+              {stockCreateReducer.isFetching && (
+                <CircularProgress
+                  color="secondary"
+                  size={20}
+                  style={{ marginLeft: 8 }}
+                />
+              )}
             </Button>
             <Button onClick={() => Router.back()}>Cancel</Button>
           </form>

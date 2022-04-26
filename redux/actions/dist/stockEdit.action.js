@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -47,27 +36,38 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var app_1 = require("next/app");
-var head_1 = require("next/head");
-var redux_1 = require("../redux");
-function MyApp(_a) {
-    var Component = _a.Component, pageProps = _a.pageProps;
-    return (React.createElement(React.Fragment, null,
-        React.createElement(head_1["default"], null,
-            React.createElement("meta", { charSet: "UTF-8" }),
-            React.createElement("meta", { name: "viewport", content: "width=device-width, initial-scale=1.0" })),
-        React.createElement(Component, __assign({}, pageProps))));
-}
-MyApp.getInitialProps = function (appContext) { return __awaiter(void 0, void 0, void 0, function () {
-    var appProps;
+exports.doGetStockById = exports.stockEditFailed = exports.stockEditSuccess = exports.stockEditFetching = exports.editStock = void 0;
+var actionTypes = require("../saga/actionTypes");
+var httpClient_1 = require("../../utils/httpClient");
+exports.editStock = function (payload) { return ({
+    type: actionTypes.STOCK_EDIT_REQUEST,
+    payload: payload
+}); };
+exports.stockEditFetching = function () { return ({
+    type: actionTypes.STOCK_EDIT_FETCHING
+}); };
+exports.stockEditSuccess = function (payload) { return ({
+    type: actionTypes.STOCK_EDIT_SUCCESS,
+    payload: payload
+}); };
+exports.stockEditFailed = function () { return ({
+    type: actionTypes.STOCK_EDIT_FAILED
+}); };
+exports.doGetStockById = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+    var response;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, app_1["default"].getInitialProps(appContext)];
+            case 0: return [4 /*yield*/, httpClient_1["default"].get("/stock/product/" + id)];
             case 1:
-                appProps = _a.sent();
-                console.log("test"); // dev
-                return [2 /*return*/, __assign({}, appProps)];
+                response = _a.sent();
+                return [2 /*return*/, response.data];
         }
     });
 }); };
-exports["default"] = redux_1.wrapper.withRedux(MyApp);
+exports["default"] = {
+    editStock: exports.editStock,
+    stockEditFetching: exports.stockEditFetching,
+    stockEditSuccess: exports.stockEditSuccess,
+    stockEditFailed: exports.stockEditFailed,
+    doGetStockById: exports.doGetStockById
+};

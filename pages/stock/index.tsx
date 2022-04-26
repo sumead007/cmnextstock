@@ -23,10 +23,20 @@ import Button from "@material-ui/core/Button";
 import MaterialTable from "material-table";
 import Router from "next/router";
 import axios from "axios";
+import actions from "../../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 type Props = {};
 
 export default function Stock({}: Props) {
+  const dispatch = useDispatch();
+  const stockListReducer = useSelector((state) => state.stockListReducer);
+
   const [products, setproducts] = useState([]);
   const load_data = async () => {
     const res = await axios.get("http://localhost:8085/api/v2/stock/product");
@@ -35,8 +45,72 @@ export default function Stock({}: Props) {
   };
 
   useEffect(() => {
-    load_data();
+    // load_data();
+    dispatch(actions.feedStockList());
   }, []);
+
+  const [open, setOpen] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState(null);
+
+  const handleClickOpen = (item) => {
+    setSelectedItem(item);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const showDeletionConfirmDlg = () => {
+    return selectedItem ? (
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Are you sure to delete this item Id : {selectedItem.id}?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <img
+                src={`${process.env.NEXT_PUBLIC_APP_BASE_IMAGE_URL}/${
+                  selectedItem.image
+                }?version=${Math.random().toString()}`}
+                style={{ width: 50, height: 50, borderRadius: "5%" }}
+              />
+              <span style={{ marginLeft: 20 }}>{selectedItem.name}</span>
+            </div>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              // dispatch(stockActions.deleteStock(selectedItem.id, dispatch));
+              dispatch(actions.deleteStock(selectedItem.id, dispatch));
+
+              handleClose();
+            }}
+            color="primary"
+            autoFocus
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+    ) : null;
+  };
 
   const columns: GridColDef[] = [
     {
@@ -59,7 +133,8 @@ export default function Stock({}: Props) {
           <IconButton
             aria-label="delete"
             onClick={() => {
-              console.log("delete");
+              // console.log(item.id);
+              handleClickOpen(item);
             }}
           >
             <DeleteIcon sx={{ color: "red" }} />
@@ -85,7 +160,9 @@ export default function Stock({}: Props) {
       width: 90,
       renderCell: (item) => (
         <img
-          src="https://static.thairath.co.th/media/dFQROr7oWzulq5Fa4L9Li4ZTkHOsfRLZqfUAiLSmsoQ834Z9V4NmK4R9tYhJvPVFs0A.jpg"
+          src={`${process.env.NEXT_PUBLIC_APP_BASE_IMAGE_URL}/${
+            item.value
+          }?version=${Math.random().toString()}}`}
           style={{ width: 70, height: 70, borderRadius: "5%" }}
         />
       ),
@@ -148,7 +225,7 @@ export default function Stock({}: Props) {
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
           sx={{ backgroundColor: "white" }}
-          rows={products != [] ? products : []}
+          rows={stockListReducer.result ? stockListReducer.result : []}
           columns={columns}
           pageSize={5}
           getRowId={(row) => row.id}
@@ -171,6 +248,7 @@ export default function Stock({}: Props) {
           title="Demo Title"
         />
       </div> */}
+      {showDeletionConfirmDlg()}
     </Layout>
   );
 }

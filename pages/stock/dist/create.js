@@ -10,6 +10,9 @@ var Card_1 = require("@mui/material/Card");
 var Box_1 = require("@mui/material/Box");
 var CardContent_1 = require("@mui/material/CardContent");
 var router_1 = require("next/router");
+var react_redux_1 = require("react-redux");
+var actions_1 = require("../../redux/actions");
+var CircularProgress_1 = require("@material-ui/core/CircularProgress");
 var validationSchema = yup.object({
     name: yup
         .string("Enter your name")
@@ -30,6 +33,8 @@ var showPreviewImage = function (values) {
     }
 };
 function StockCreate(_a) {
+    var stockCreateReducer = react_redux_1.useSelector(function (state) { return state.stockCreateReducer; });
+    var dispatch = react_redux_1.useDispatch();
     var formik = formik_1.useFormik({
         initialValues: {
             name: "foobar",
@@ -38,7 +43,13 @@ function StockCreate(_a) {
         },
         validationSchema: validationSchema,
         onSubmit: function (values) {
-            alert(JSON.stringify(values, null, 2));
+            // alert(JSON.stringify(values, null, 2));
+            var formData = new FormData();
+            formData.append("name", values.name);
+            formData.append("price", values.price);
+            formData.append("stock", values.stock);
+            formData.append("image", values.file);
+            dispatch(actions_1["default"].createStock(formData));
         }
     });
     return (react_1["default"].createElement(layout_1["default"], null,
@@ -57,7 +68,9 @@ function StockCreate(_a) {
                             formik.setFieldValue("file_obj", URL.createObjectURL(e.target.files[0]));
                         } }),
                     react_1["default"].createElement("br", null),
-                    react_1["default"].createElement(Button_1["default"], { color: "primary", variant: "contained", type: "submit" }, "Submit"),
+                    react_1["default"].createElement(Button_1["default"], { color: "primary", variant: "contained", type: "submit", onSubmit: function () { }, disabled: stockCreateReducer.isFetching },
+                        "Submit",
+                        stockCreateReducer.isFetching && (react_1["default"].createElement(CircularProgress_1["default"], { color: "secondary", size: 20, style: { marginLeft: 8 } }))),
                     react_1["default"].createElement(Button_1["default"], { onClick: function () { return router_1["default"].back(); } }, "Cancel"))))));
 }
 exports["default"] = StockCreate;

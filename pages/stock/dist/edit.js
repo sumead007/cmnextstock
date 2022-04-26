@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -47,6 +58,8 @@ var Card_1 = require("@mui/material/Card");
 var Box_1 = require("@mui/material/Box");
 var CardContent_1 = require("@mui/material/CardContent");
 var router_1 = require("next/router");
+var actions_1 = require("../../redux/actions");
+var react_redux_1 = require("react-redux");
 var validationSchema = yup.object({
     name: yup
         .string("Enter your name")
@@ -61,26 +74,41 @@ var validationSchema = yup.object({
         .min(1, "กรุณากรอก1ตัวขึ้น")
         .required("stock is required")
 });
-var showPreviewImage = function (values) {
-    if (values.file_obj) {
-        return react_1["default"].createElement("img", { src: values.file_obj, style: { height: 100, marginTop: 16 } });
-    }
-};
 function StockEdit(_a) {
-    var id = _a.id, name = _a.name, stock = _a.stock, price = _a.price;
+    var id = _a.id, name = _a.name, stock = _a.stock, price = _a.price, image = _a.image;
+    var stockEditReducer = react_redux_1.useSelector(function (state) { return state.stockEditReducer; });
+    var dispatch = react_redux_1.useDispatch();
     var formik = formik_1.useFormik({
         initialValues: {
             id: id,
             name: name,
             price: price,
-            stock: stock
+            stock: stock,
+            image: image
         },
         validationSchema: validationSchema,
         onSubmit: function (values) {
-            alert(JSON.stringify(values, null, 2));
+            // alert(JSON.stringify(values, null, 2));
+            var formData = new FormData();
+            formData.append("id", values.id);
+            formData.append("name", values.name);
+            formData.append("price", values.price);
+            formData.append("stock", values.stock);
+            if (values.file) {
+                formData.append("image", values.file);
+            }
+            dispatch(actions_1["default"].editStock(formData));
         },
         enableReinitialize: true
     });
+    var showPreviewImage = function (values) {
+        if (values.file_obj) {
+            return react_1["default"].createElement("img", { src: values.file_obj, style: { height: 100 } });
+        }
+        else if (values.image) {
+            return (react_1["default"].createElement("img", { src: process.env.NEXT_PUBLIC_APP_BASE_IMAGE_URL + "/" + values.image, style: { height: 100, marginTop: 20 } }));
+        }
+    };
     return (react_1["default"].createElement(layout_1["default"], null,
         react_1["default"].createElement(Card_1["default"], { sx: { flexGrow: 1 } },
             react_1["default"].createElement(Box_1["default"], { component: "h1" }, "Edit Product"),
@@ -98,20 +126,20 @@ function StockEdit(_a) {
                             formik.setFieldValue("file_obj", URL.createObjectURL(e.target.files[0]));
                         } }),
                     react_1["default"].createElement("br", null),
-                    react_1["default"].createElement(Button_1["default"], { color: "primary", onClick: function () {
-                        }, variant: "contained", type: "submit" }, "Edit"),
+                    react_1["default"].createElement(Button_1["default"], { color: "primary", onClick: function () { }, variant: "contained", type: "submit" }, "Edit"),
                     react_1["default"].createElement(Button_1["default"], { onClick: function () { return router_1["default"].back(); } }, "Cancel"))))));
 }
 exports["default"] = StockEdit;
 exports.getServerSideProps = function (context) { return __awaiter(void 0, void 0, void 0, function () {
+    var result;
     return __generator(this, function (_a) {
-        return [2 /*return*/, {
-                props: {
-                    id: context.query.id.toString(),
-                    name: "test",
-                    stock: 1,
-                    price: 100
-                }
-            }];
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, actions_1["default"].doGetStockById(context.query.id)];
+            case 1:
+                result = _a.sent();
+                return [2 /*return*/, {
+                        props: __assign({}, result)
+                    }];
+        }
     });
 }); };

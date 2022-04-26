@@ -30,8 +30,12 @@ exports.__esModule = true;
 exports.watchRegisterRequest = void 0;
 var effects_1 = require("redux-saga/effects");
 var register_saga_1 = require("./register.saga");
+var stockList_saga_1 = require("./stockList.saga");
+var stockCreate_saga_1 = require("./stockCreate.saga");
+var stockEdit_saga_1 = require("./stockEdit.saga");
 var login_saga_1 = require("./login.saga");
 var actionTypes = require("./actionTypes");
+var stockDelete_saga_1 = require("./stockDelete.saga");
 // Register
 function watchRegisterRequest() {
     return __generator(this, function (_a) {
@@ -77,6 +81,50 @@ function watchLogoutRequest() {
         }
     });
 }
+// StockList
+function watchStockListRequest() {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, effects_1.takeEvery(actionTypes.STOCK_LIST_REQUEST, stockList_saga_1.sagaStockList)];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}
+// StockCreate
+function watchStockCreateRequest() {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, effects_1.takeEvery(actionTypes.STOCK_CREATE_REQUEST, stockCreate_saga_1.sagaStockCreate)];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}
+// StockEdit
+function watchStockEditRequest() {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, effects_1.takeEvery(actionTypes.STOCK_EDIT_REQUEST, stockEdit_saga_1.sagaStockEdit)];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}
+// StockDelete
+function watchStockDeleteRequest() {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, effects_1.takeEvery(actionTypes.STOCK_DELETE_REQUEST, stockDelete_saga_1.sagaStockDelete)];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}
 function rootSaga() {
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -84,7 +132,11 @@ function rootSaga() {
                     watchRegisterRequest(),
                     watchLoginRequest(),
                     watchReLoginRequest(),
-                    watchLogoutRequest()
+                    watchLogoutRequest(),
+                    watchStockListRequest(),
+                    watchStockCreateRequest(),
+                    watchStockEditRequest(),
+                    watchStockDeleteRequest()
                 ])];
             case 1:
                 _a.sent();

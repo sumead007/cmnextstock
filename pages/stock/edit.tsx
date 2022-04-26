@@ -9,12 +9,16 @@ import Box from "@mui/material/Box";
 import CardContent from "@mui/material/CardContent";
 import { GetServerSideProps } from "next";
 import Router from "next/router";
+import actions from "../../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
+
 
 type Props = {
   id: string;
   name: string;
   stock: number;
   price: number;
+  image: string;
 };
 
 const validationSchema = yup.object({
@@ -32,26 +36,46 @@ const validationSchema = yup.object({
     .required("stock is required"),
 });
 
-const showPreviewImage = (values) => {
-  if (values.file_obj) {
-    return <img src={values.file_obj} style={{ height: 100, marginTop: 16 }} />;
-  }
-};
+export default function StockEdit({ id, name, stock, price, image }: Props) {
+  const stockEditReducer = useSelector((state) => state.stockEditReducer);
+  const dispatch = useDispatch();
 
-export default function StockEdit({ id, name, stock, price }: Props) {
   const formik = useFormik({
     initialValues: {
       id,
       name,
       price,
       stock,
+      image,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      // alert(JSON.stringify(values, null, 2));
+      let formData = new FormData();
+      formData.append("id", values.id);
+      formData.append("name", values.name);
+      formData.append("price", values.price);
+      formData.append("stock", values.stock);
+      if (values.file) {
+        formData.append("image", values.file);
+      }
+      dispatch(actions.editStock(formData));
     },
     enableReinitialize: true,
   });
+
+  const showPreviewImage = (values) => {
+    if (values.file_obj) {
+      return <img src={values.file_obj} style={{ height: 100 }} />;
+    } else if (values.image) {
+      return (
+        <img
+          src={`${process.env.NEXT_PUBLIC_APP_BASE_IMAGE_URL}/${values.image}`}
+          style={{ height: 100, marginTop: 20 }}
+        />
+      );
+    }
+  };
 
   return (
     <Layout>
@@ -120,9 +144,12 @@ export default function StockEdit({ id, name, stock, price }: Props) {
               }}
             />
             <br />
-            <Button color="primary" onClick={()=>{
-             
-            }} variant="contained" type="submit">
+            <Button
+              color="primary"
+              onClick={() => {}}
+              variant="contained"
+              type="submit"
+            >
               Edit
             </Button>
             <Button onClick={() => Router.back()}>Cancel</Button>
@@ -138,12 +165,10 @@ export default function StockEdit({ id, name, stock, price }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const result = await actions.doGetStockById(context.query.id);
   return {
     props: {
-      id: context.query.id.toString(),
-      name: "test",
-      stock: 1,
-      price: 100,
+      ...result,
     },
   };
 };
