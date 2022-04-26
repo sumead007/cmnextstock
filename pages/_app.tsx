@@ -16,10 +16,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   );
 }
-export default wrapper.withRedux(MyApp);
-// MyApp.getInitialProps = async (appContext) => {
-//   // calls page's `getInitialProps` and fills `appProps.pageProps`
-//   const appProps = await App.getInitialProps(appContext);
 
-//   return { ...appProps };
-// };
+MyApp.getInitialProps = async (appContext) => {
+  // calls page's `getInitialProps` and fills `appProps.pageProps`
+  const appProps = await App.getInitialProps(appContext);
+
+  return { ...appProps };
+};
+
+export default wrapper.withRedux(MyApp);

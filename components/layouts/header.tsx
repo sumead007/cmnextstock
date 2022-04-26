@@ -16,6 +16,9 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Router from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import actions from "../../redux/actions";
+
 
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
@@ -59,6 +62,7 @@ const Search = styled("div")(({ theme }) => ({
 }));
 
 export default function Header() {
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -201,7 +205,7 @@ export default function Header() {
             aria-label="account of current user"
             aria-controls={menuId}
             aria-haspopup="true"
-            onClick={()=>Router.push("/login")}
+            onClick={()=>  dispatch(actions.logout())}
             // onClick={handleProfileMenuOpen}
             color="inherit"
           >

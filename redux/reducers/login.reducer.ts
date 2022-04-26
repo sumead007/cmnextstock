@@ -26,6 +26,8 @@ export default (state = initialState, { type, payload }) => {
         result: payload.result,
         isFetching: false,
         isFailed: true,
+        token: payload.token,
+        username: payload.username
       };
     case LOGOUT_SUCCESS:
       return initialState;

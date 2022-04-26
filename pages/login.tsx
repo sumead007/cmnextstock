@@ -15,8 +15,12 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import actions from "../redux/actions";
+import { NextPageContext } from "next";
+import { getCookie } from "../utils/cookie";
 
-type Props = {};
+type Props = {
+  token?: string;
+};
 
 const onClickLogin = () => {
   Router.push("/stock");
@@ -33,8 +37,14 @@ const validationSchema = yup.object({
     .required("password is required"),
 });
 
-export default function Login({}: Props) {
+export default function Login({ token }: Props) {
   //  const authReducer =  useSelector(({authReducer})=>authReducer)
+  React.useEffect(() => {
+    // first;
+
+    dispatch(actions.relogin({ token }));
+  }, []);
+
   const dispatch = useDispatch();
   const loginReducer = useSelector(({ loginReducer }) => loginReducer);
 
@@ -109,7 +119,7 @@ export default function Login({}: Props) {
                 variant="contained"
                 type="button"
                 onClick={() => {
-                  dispatch(actions.login(formik.values))
+                  dispatch(actions.login(formik.values));
                 }}
               >
                 Login
@@ -147,3 +157,14 @@ export default function Login({}: Props) {
     </React.Fragment>
   );
 }
+
+// Called in server-side
+Login.getInitialProps = (ctx: NextPageContext) => {
+  let token;
+  const isServer = !!ctx.req;
+  if (isServer && ctx.req.headers.cookie) {
+    token = getCookie("token", ctx.req);
+  }
+  console.log("CMCookie : token " + token);
+  return { token };
+};
