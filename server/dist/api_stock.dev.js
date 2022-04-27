@@ -18,8 +18,10 @@ var path = require("path");
 
 var fs = require("fs-extra");
 
-var Op = Sequelize.Op; // const jwt = require("./jwt");
-// Upload Image
+var Op = Sequelize.Op;
+
+var jwt = require("./jwt"); // Upload Image
+
 
 uploadImage = function uploadImage(files, doc) {
   var fileExtention, newpath, result;
@@ -68,7 +70,7 @@ uploadImage = function uploadImage(files, doc) {
 }; // Get Products
 
 
-router.get("/product", function _callee(req, res) {
+router.get("/product", jwt.verify, function _callee(req, res) {
   var result;
   return regeneratorRuntime.async(function _callee$(_context2) {
     while (1) {
@@ -91,7 +93,7 @@ router.get("/product", function _callee(req, res) {
   });
 }); // Add Product
 
-router.post("/product", function _callee3(req, res) {
+router.post("/product", jwt.verify, function _callee3(req, res) {
   var form;
   return regeneratorRuntime.async(function _callee3$(_context4) {
     while (1) {
@@ -142,7 +144,7 @@ router.post("/product", function _callee3(req, res) {
   });
 }); // Update Product
 
-router.put("/product", function _callee5(req, res) {
+router.put("/product", jwt.verify, function _callee5(req, res) {
   var form;
   return regeneratorRuntime.async(function _callee5$(_context6) {
     while (1) {

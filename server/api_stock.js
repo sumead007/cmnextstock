@@ -7,7 +7,7 @@ const formidable = require("formidable");
 const path = require("path");
 const fs = require("fs-extra");
 const Op = Sequelize.Op;
-// const jwt = require("./jwt");
+const jwt = require("./jwt");
 
 // Upload Image
 uploadImage = async (files, doc) => {
@@ -31,13 +31,13 @@ uploadImage = async (files, doc) => {
 };
 
 // Get Products
-router.get("/product", async (req, res) => {
+router.get("/product", jwt.verify, async (req, res) => {
   let result = await product.findAll({ order: Sequelize.literal("id DESC") });
   res.json(result);
 });
 
 // Add Product
-router.post("/product", async (req, res) => {
+router.post("/product", jwt.verify, async (req, res) => {
   try {
     const form = new formidable.IncomingForm();
     form.parse(req, async (error, fields, files) => {
@@ -54,7 +54,7 @@ router.post("/product", async (req, res) => {
 });
 
 // Update Product
-router.put("/product", async (req, res) => {
+router.put("/product", jwt.verify, async (req, res) => {
   try {
     var form = new formidable.IncomingForm();
     form.parse(req, async (err, fields, files) => {

@@ -13,11 +13,11 @@ router.post("/login", async (req, res) => {
   if (result != null) {
     if (bcrypt.compareSync(password, result.password)) {
       const payload = { username, level: "normal" };
-      // const token = jwt.sign(payload);
-      const token = payload;
+      const token = jwt.sign(payload);
+      // const token = payload;
       res.json({
         result: constants.kResultOk,
-        token:"1234",
+        token,
         username,
         message: JSON.stringify(result),
       });
