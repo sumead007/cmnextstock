@@ -1,4 +1,4 @@
-import { kResultOk, kResultNok } from "../../utils/contants";
+import { kResultOk, kResultNok, TOKEN } from "../../utils/contants";
 import { put, call, select, delay } from "redux-saga/effects";
 import actions from "../actions";
 import httpClient from "../../utils/httpClient";
@@ -12,6 +12,7 @@ export function* sagaLogin({ payload }: any) {
     const { result } = response.data;
     if (result == kResultOk) {
       setCookie("token", response.data.token);
+      setCookie("username", response.data.username);
       yield put(actions.loginSuccess(response.data ));
       Router.push("/stock");
     } else {

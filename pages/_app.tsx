@@ -1,11 +1,14 @@
 import type { AppProps } from "next/app";
 import App from "next/app";
 import Head from "next/head";
+import { useDispatch } from "react-redux";
 import { wrapper } from "../redux";
+import { setInterceptor } from "../utils/httpClient";
 
 interface AppProps {}
 
 function MyApp({ Component, pageProps }: AppProps) {
+  setInterceptor(useDispatch());
   return (
     <>
       <Head>
